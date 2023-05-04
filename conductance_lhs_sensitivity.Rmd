@@ -42,7 +42,8 @@ parm = as.data.frame(matrix(nrow=nrow(parm_quant), ncol=ncol(parm_quant)))
 colnames(parm) = pnames
 
 # Windspeeds v are normally distributed with a mean of 250 cm/s with a standard deviation of 30 cm/s
-parm[,"v"] = qnorm(parm_quant[,"v"], mean=250, sd=30)
+# convert to m/s by dividing by 100
+parm[,"v"] = qnorm(parm_quant[,"v"], mean=250/100, sd=30/100)
 
 # For vegetation height assume that height is somewhere between 9.5 and 10.5 m (but any value in that range is equally likely)
 parm[,"height"] = qunif(parm_quant[,"height"], min=9.5, max=10.5)
@@ -92,6 +93,7 @@ results2 <- results |>
 ggplot(results2, aes(x = parmvalue, y = Ca, col = parm)) +
   geom_point() +
   facet_wrap(~parm,scales = "free", ncol = 4) +
+  labs(x = "Parameter Values", y = "Conductance (mm/s)") +
   theme_minimal()
 ```
 
