@@ -48,7 +48,6 @@ parm[,"v"] = qnorm(parm_quant[,"v"], mean=250, sd=30)
 parm[,"height"] = qunif(parm_quant[,"height"], min=9.5, max=10.5)
 
 # For the kd and k0 parameters you can assume that they are normally distributed with standard deviation of 1% of their default values 
-#? how would you create a standard deviation of 1% ?
 parm[,"k_d"] = qnorm(parm_quant[,"k_d"], mean=0.7, sd=0.7*0.01)
 parm[,"k_o"] = qnorm(parm_quant[,"k_o"], mean=0.1, sd=0.1*0.01)
 ```
@@ -70,10 +69,11 @@ conductance_df = conductance |>
 # Plotting
 ## Plot conductance estimates in a way that accounts for parameter uncertainty
 ```{r}
-ggplot(data = conductance_df, aes(y = Ca)) +
+ggplot(data = conductance_df, aes(y = Ca, x = "")) +
   geom_boxplot(col = "darkorchid") +
   labs(y = "Conductance (mm/s)") +
-  theme_minimal()
+  theme_minimal() +
+  labs(x = "")
 
 # cumulative distribution
 ggplot(conductance_df, aes(Ca))+stat_ecdf()+
@@ -89,16 +89,24 @@ results <- cbind.data.frame(conductance_df, parm)
 results2 <- results |> 
   gather(height, k_d, k_o, v, value="parmvalue",key="parm")
 
-ggplot(results2, aes(x = Ca, y = parmvalue, col = parm)) +
+ggplot(results2, aes(x = parmvalue, y = Ca, col = parm)) +
   geom_point() +
-  facet_wrap(~parm, scales = "free", ncol = 4) +
+  facet_wrap(~parm,scales = "free", ncol = 4) +
   theme_minimal()
 ```
 
 
 # Estimate Partial Rank Correlation Coefficients
 ```{r}
+senresult <- pcc(parm, conductance_df$Ca, rank = T)
 
+plot(senresult)
+
+print(senresult$PRCC)
 ```
 
 # Results Discussion
+
+From the scatter plot of conductance and parameter values it appears that conductance is most sensitive to variation in velocity. The partial rank coefficient is highest for velocity which is consistent with the our interpretation of the scatter plot. This suggests that to reduce the uncertainty in aerodynamic conductance estimates we would want to focus on reducing the uncertainty in the velocity measurement. 
+
+This would suggest that in a changing climate with more unpredictable and severe weather plant water user will be affected by changing wind speed and direction. It could also affect our ability to accurately estimate plant water use as variability in wind velocity becomes more uncertain. 
