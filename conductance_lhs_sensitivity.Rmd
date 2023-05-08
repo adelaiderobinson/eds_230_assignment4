@@ -41,14 +41,19 @@ colnames(parm_quant)=pnames
 parm = as.data.frame(matrix(nrow=nrow(parm_quant), ncol=ncol(parm_quant)))
 colnames(parm) = pnames
 
-# Windspeeds v are normally distributed with a mean of 250 cm/s with a standard deviation of 30 cm/s
+# Windspeeds v are normally distributed
+#with a mean of 250 cm/s with a standard deviation of 30 cm/s
 # convert to m/s by dividing by 100
 parm[,"v"] = qnorm(parm_quant[,"v"], mean=250/100, sd=30/100)
 
-# For vegetation height assume that height is somewhere between 9.5 and 10.5 m (but any value in that range is equally likely)
+# For vegetation height assume that
+#height is somewhere between 9.5 and 10.5 m
+#(but any value in that range is equally likely)
 parm[,"height"] = qunif(parm_quant[,"height"], min=9.5, max=10.5)
 
-# For the kd and k0 parameters you can assume that they are normally distributed with standard deviation of 1% of their default values 
+# For the kd and k0 parameters
+#you can assume that they are 
+#normally distributed with standard deviation of 1% of their default values 
 parm[,"k_d"] = qnorm(parm_quant[,"k_d"], mean=0.7, sd=0.7*0.01)
 parm[,"k_o"] = qnorm(parm_quant[,"k_o"], mean=0.1, sd=0.1*0.01)
 ```
@@ -82,11 +87,13 @@ ggplot(conductance_df, aes(Ca))+stat_ecdf()+
 ```
 
 ## Plot conductance estimates against each of the parameters
-```{r}
+``````{r fig.width=12, fig.height=6}
 # combine Ca values to parms into a dataframe
 results <- cbind.data.frame(conductance_df, parm)
 
-# reshape data so that you have one column for Ca value, one column for parameter type, and one column for parameter value
+# reshape data so that you
+#have one column for Ca value,
+#one column for parameter type, and one column for parameter value
 results2 <- results |> 
   gather(height, k_d, k_o, v, value="parmvalue",key="parm")
 
@@ -113,4 +120,4 @@ From the scatter plot of conductance and parameter values it appears that conduc
 
 This would suggest that in a changing climate with more unpredictable and severe weather plant water user will be affected by changing wind speed and direction. It could also affect our ability to accurately estimate plant water use as variability in wind velocity becomes more uncertain. 
 
-Although it is difficult to interpret from the scatter plot alone, the partial rank correlation coefficient on height indicates that conductance is also highly sensitive to variation height. This is followed by variation in k_o having a smaller effect, and conductance being the least effected by variation in k_d. 
+Although it is difficult to interpret from the scatter plot alone, the partial rank correlation coefficient on height indicates that conductance is also highly sensitive to variation in height. This is followed by variation in k_o having a smaller effect, and conductance being the least effected by variation in k_d. 
