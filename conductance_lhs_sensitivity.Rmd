@@ -112,3 +112,5 @@ print(senresult$PRCC)
 From the scatter plot of conductance and parameter values it appears that conductance is most sensitive to variation in velocity. The partial rank coefficient is highest for velocity which is consistent with the our interpretation of the scatter plot. This suggests that to reduce the uncertainty in aerodynamic conductance estimates we would want to focus on reducing the uncertainty in the velocity measurement. 
 
 This would suggest that in a changing climate with more unpredictable and severe weather plant water user will be affected by changing wind speed and direction. It could also affect our ability to accurately estimate plant water use as variability in wind velocity becomes more uncertain. 
+
+Although it is difficult to interpret from the scatter plot alone, the partial rank correlation coefficient on height indicates that conductance is also highly sensitive to variation height. This is followed by variation in k_o having a smaller effect, and conductance being the least effected by variation in k_d. 
